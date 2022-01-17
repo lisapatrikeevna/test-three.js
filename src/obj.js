@@ -1,79 +1,112 @@
-import React, {Component, useEffect, useRef} from "react";
-import ReactDOM from "react-dom";
-import * as THREE from "three";
-import {useDispatch} from 'react-redux'
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
-import t from './assets/shiba/scene.gltf'
+import React, {useEffect, useRef, useState} from "react"
+import * as THREE from "three"
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader'
 
-function CanvasContainer() {
-    const mountRef = useRef(null);
-    // const dispatch = useDispatch()
+
+function SomeObj() {
+    // const mountRef = useRef(null);
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
-    const renderer = new THREE.WebGLRenderer();
-    useEffect(() => {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        // document.body.appendChild( renderer.domElement );
-        // use ref as a mount point of the Three.js scene instead of the document.body
-        if (!mountRef.current) {
-            return;
-        }
-        // this.mount.appendChild(renderer.domElement);
-        mountRef.current.appendChild(renderer.domElement);
-        // camera.position.z = 5;
-        camera.position.set(100, 0, 1000)
-        const light = new THREE.AmbientLight(0xffffff)
-        scene.add(light)
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+    const renderer = new THREE.WebGLRenderer()
+    // const light = new THREE.AmbientLight(0xffffff)
+    //scene.add(light)
+    const light = new THREE.DirectionalLight(0xffffff, 2)
+    // const light = new THREE.DirectionalLight(0xffffff, 0.5)
+    //17.15
+    // const plane = new THREE.PlaneGeometry(3, 3, 5, 5)
 
-        //cube
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({color: 0x00ff00,wireframe: true });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
-        console.log(geometry);
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    // if (!mountRef.current) {return;}
+    // mountRef.current.appendChild(renderer.domElement);
+    camera.position.z = 5
+    // camera.position.set(100, 0, 1000)
+    light.position.set(0, 1, 2)
+    scene.add(light)
+    let canvas = document.body.appendChild(renderer.domElement)
 
-        //Sphere
-        const geometryS = new THREE.SphereGeometry(200, 12, 12);
-        const materialS = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        //https://www.youtube.com/watch?v=ngGQD7mIEok&ab_channel=%D0%94%D0%BC%D0%B8%D1%82%D1%80%D0%B8%D0%B9%D0%9B%D0%B0%D0%B2%D1%80%D0%B8%D0%BA
-        //8:22
-        // const materialS = new THREE.MeshBasicMaterial({color: 0x00ff00,vertexColors: THREE.FaceColors });
-        // for (let i = 0; i < geometryS.faces.length; i++) {
-        //     geometryS.faces[i].color.setRGB(Math.random(), Math.random(), Math.random())
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    // const material = new THREE.LineBasicMaterial({color: 0x00ff00,side:THREE.DoubleSide,
+    const material = new THREE.MeshBasicMaterial({
+        color: 0x00ff00, side: THREE.DoubleSide,
+        // map: new THREE.TextureLoader().load('./texture.png')//or
+        map: THREE.ImageUtils.loadTexture('/bgImage.jpg')
+    })
+    // material.map = new THREE.TextureLoader().load('./bgImage.jpg')
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.x = -3
+    cube.position.y = 3
+    cube.castShadow = true
+    scene.add( cube );
+
+    const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    // dracoLoader.setDecoderPath( '/examples/js/libs/draco/' );
+    loader.setDRACOLoader(dracoLoader);
+
+    //22.02
+    let mouse = {
+        x: undefined,
+        y: undefined
+    }
+    const raycaster = new THREE.Raycaster()
+
+   canvas.onmousemove = function (e){
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        camera.position.x = mouse.x
+        camera.position.y = mouse.y
+
+    }
+    // let mouse = new THREE.Vector2()
+    // // function handleMouseMove(e) {mouse.x = e.pageX, mouse.y = e.pageY}
+
+
+    loader.load(
+        // resource URL
+        './bread.glb',
+        // //called when the resource is loaded
+        (gltf) => {
+            let newImg = gltf.scene
+            newImg.scale.set(15, 15, 15)
+            scene.add(newImg);
+
+            // gltf.animations; // Array<THREE.AnimationClip>
+            // gltf.scene; // THREE.Group
+            // gltf.scenes; // Array<THREE.Group>
+            // gltf.cameras; // Array<THREE.Camera>
+            // gltf.asset; // Object
+        },
+        // called while loading is progressing
+        function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        // called when loading has errors
+        function (error) {
+            // console.log('An error happened');
+            console.log(error);
+        })
+    const animate = () => {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        cube.rotation.x += 0.01
+        // if (mouse.x !== undefined) {
+        //     raycaster.setFromCamera(mouse, camera)
+        //     const intersection = raycaster.intersectObject()
+        //     console.log('intersection', intersection);
         // }
-        const mesh = new THREE.Mesh(geometryS, materialS);
-        scene.add(mesh)
-
-
-        // const loader = new GLTFLoader();
-        // // loader.load( 'path/to/model.glb', function ( gltf ) {
-        // loader.load( {t}, function ( gltf ) {
-        //     scene.add( gltf.scene );
-        // }, undefined, function ( error ) {
-        //     console.error( error );
-        // } );
-
-        const animate = () => {
-            requestAnimationFrame(animate);
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-
-            mesh.position.x += 1
-            mesh.rotation.y += 0.01;
-            renderer.render(scene, camera);
-
-
-            //if dont use useEffect, i cen use
-            //requestAnimationFrame(function (){animate()})
-        };
-        // useEffect( ()=>{
-        animate();
-    }, [])
-
+    };
+    animate();
 
     return (
-        <div className='CanvasContainer' ref={mountRef}/>
+        <>
+            <p>mouse move</p>
+            {/*<div id='SomeObj' className='SomeObj' ref={mountRef}/>*/}
+            <div id='SomeObj' className='SomeObj' />
+
+        </>
     )
 }
 
-export default CanvasContainer
+export default SomeObj

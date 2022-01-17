@@ -1,0 +1,28 @@
+Изучаем Three.js.Глава 2: Работа с основными компонентами,
+из которых состоитThree.js-сцена  https://habr.com/ru/post/225199/
+
+Основные элементы three.js:   https://documentation.help/three.js-ru/core.htm
+
+как получить нажатие на элемент в THREE.js:
+https://overcoder.net/q/442427/%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C-%D0%BD%D0%B0%D0%B6%D0%B0%D1%82%D0%B8%D0%B5-%D0%BD%D0%B0-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82-%D0%B2-threejs
+
+Мышь / Холст X, Y в Three.js World X, Y, Z:  https://answer-id.com/ru/54713094
+
+Получение координаты высоты ландшафта Three.js:
+https://ru.stackoverflow.com/questions/400295/%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BA%D0%BE%D0%BE%D1%80%D0%B4%D0%B8%D0%BD%D0%B0%D1%82%D1%8B-%D0%B2%D1%8B%D1%81%D0%BE%D1%82%D1%8B-%D0%BB%D0%B0%D0%BD%D0%B4%D1%88%D0%B0%D1%84%D1%82%D0%B0-three-js
+
+https://stackoverflow.com/questions/44823986/how-to-rotate-object-to-look-mouse-point-in-three-js/44825851
+https://codesandbox.io/s/threejs-tween-bouncing-cube-3ipyy?file=/src/client/client.ts:1302-1841
+
+https://www.8thwall.com/8thwall/flyer-threejs/code/imagetarget.js
+https://www.8thwall.com/playground/curved-slam-threejs/code/curved-target-video.js
+https://www.8thwall.com/playground/animated-shaders-threejs/code/
+
+
+https://www.8thwall.com/8thwall/face-effects-threejs
+https://www.8thwall.com/playground/clipping-planes-threejs/code/
+https://www.8thwall.com/playground/depthkit-threejs
+
+https://www.8thwall.com/playground/threejs-8i
+https://www.8thwall.com/playground/tetavi-threejs
+
